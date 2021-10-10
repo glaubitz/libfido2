@@ -148,10 +148,6 @@ send_dummy_register(fido_dev_t *dev, int *ms)
 	unsigned char	 reply[FIDO_MAXMSG];
 	int		 r;
 
-#ifdef FIDO_FUZZ
-	*ms = 0; /* XXX */
-#endif
-
 	/* dummy challenge & application */
 	memset(&challenge, 0xff, sizeof(challenge));
 	memset(&application, 0xff, sizeof(application));
@@ -579,10 +575,6 @@ u2f_register(fido_dev_t *dev, fido_cred_t *cred, int *ms)
 	int		 found;
 	int		 r;
 
-#ifdef FIDO_FUZZ
-	*ms = 0; /* XXX */
-#endif
-
 	if (cred->rk == FIDO_OPT_TRUE || cred->uv == FIDO_OPT_TRUE) {
 		fido_log_debug("%s: rk=%d, uv=%d", __func__, cred->rk,
 		    cred->uv);
@@ -772,7 +764,7 @@ u2f_get_touch_begin(fido_dev_t *dev)
 	unsigned char	 clientdata_hash[SHA256_DIGEST_LENGTH];
 	unsigned char	 rp_id_hash[SHA256_DIGEST_LENGTH];
 	unsigned char	 reply[FIDO_MAXMSG];
-	int		 ms = 200; /* XXX */
+	int		 ms = dev->timeout_ms;
 	int		 r;
 
 	memset(&clientdata_hash, 0, sizeof(clientdata_hash));
